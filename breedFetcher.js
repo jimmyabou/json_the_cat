@@ -1,21 +1,26 @@
 const request = require('request');
-let array = process.argv.slice(2);
-request(`https://api.thecatapi.com/v1/breeds/search?q=${array}`, (error, response, body) => {
-  if (error) {
-    console.log("error in the domain :", error);
-  } else {
-    const data = JSON.parse(body);
-    if (data.length === 0) {
-      console.log("the breed that you entered does not exist");
+//const breedName = process.argv[2];
+const fetchBreedDescription = function(breedName,callBack) {
+  request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
+    if (error) {
+    //console.log("error in the domain :", error);
+      callBack(error,null);
     } else {
+      const data = JSON.parse(body);
+      if (data.length === 0) {
+        console.log("the breed that you entered does not exist");
+      } else {
       // console.log(body);
       // console.log(typeof body);
-      console.log(data);
-      console.log(typeof data);
-    }
+        callBack(null,data);
+      // console.log(data);
+      // console.log(typeof data);
+      }
 
-  }
-});
+    }
+  });
+};
+module.exports = { fetchBreedDescription };
 
 
 // console.log(request);
